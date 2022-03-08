@@ -3,11 +3,17 @@ const mongoose = require("mongoose");
 const app = express();
 const user = require("./Routes/user_management-service");
 const adminRoutes = require("./Routes/admin-router");
+const swaggerJsdoc = require("swagger-jsdoc");
+const YAML = require("yaml-js");
+const swaggerUi = require("swagger-ui-express");
+swaggerDocument = YAML.load("swagger.yaml");
 
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(user);
 app.use(adminRoutes);
+
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/New_API_Inland", {

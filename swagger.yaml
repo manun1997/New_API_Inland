@@ -1,0 +1,23 @@
+openapi: 2  .0.0
+info:
+  title: New Inland API
+  description: New Inland APIs
+  version: 0.1.9
+servers:
+  - url: http://localhost:4030/New_API_inland/
+    description: Optional Local Servers
+  - url: http://localhost:4030/New_API_inland/
+    description: Optonal Local APi
+paths:
+  /user:
+    get:
+      tags:
+        - "User"
+      summary: "Find Single User"
+      description: ""
+      operationId: "getUser"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+        - api_key: []
