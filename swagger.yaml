@@ -1,23 +1,232 @@
-openapi: 2  .0.0
+swagger: "2.0.0"
 info:
   title: New Inland API
   description: New Inland APIs
   version: 0.1.9
-servers:
-  - url: http://localhost:4030/New_API_inland/
-    description: Optional Local Servers
-  - url: http://localhost:4030/New_API_inland/
-    description: Optonal Local APi
+tags:
+  - name: "User"
+    description: "Everything is on Dashboard"
+basePath: /
+schemes:
+  - http
+  - https
 paths:
-  /user:
+  /view-user:
     get:
       tags:
         - "User"
-      summary: "Find Single User"
+      summary: "View All Users"
       description: ""
-      operationId: "getUser"
+      operationId: "getUsers"
+      produces:
+        - "application/xml"
+        - "application/json"
       responses:
         default:
           description: "successful operation"
       security:
         - api_key: []
+
+  /add-user:
+    post:
+      tags:
+        - "User"
+      summary: "Create New User"
+      description: "We can Add user directly"
+      operationId: "Crete User"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Add New User"
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "Successfull Opearation"
+      security:
+        - api_key: []
+
+  /add_user_address:
+    post:
+      tags:
+        - "User"
+      summary: "Add New User Address"
+      description: "We can Add User Address directly"
+      operationId: "Add Exits User Address By Id"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Add User Adress"
+          required: true
+          schema:
+            $ref: "#/definitions/Useraddress"
+      responses:
+        default:
+          description: "Successfull Opearation"
+      security:
+        - api_key: []
+
+  /userdata_with_address/{id}:
+    get:
+      tags:
+        - "User"
+      summary: "Get Single user Address"
+      description: ""
+      operationId: "findUser"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Fetch Id and show the user details"
+          required: true
+
+      responses:
+        default:
+          description: "Successfull Operation"
+      security:
+        - api_key: []
+
+  /single_user_data/{id}:
+    put:
+      tags:
+        - "User"
+      summary: "Update Single User"
+      description: "Update Single User"
+      operationId: "findByIdAndUpdate"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the user that needs to be updated"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Add New User"
+          required: true
+          schema:
+            $ref: "#/definitions/Userupdate"
+      responses:
+        default:
+          description: "Successfull Opearation"
+      security:
+        - api_key: []
+
+  /delete_single_user/{id}:
+    delete:
+      tags:
+        - "User"
+      summary: "update staus by user ID"
+      description: ""
+      operationId: "useFindAndModify"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the product that needs to be deleted"
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+      security:
+        - api_key: []
+
+  /delete_same_user_diffcollection/{phone}:
+    delete:
+      tags:
+        - "User"
+      summary: "Delete Data By User Phone Number"
+      description: ""
+      operationId: "deleteMany"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - name: "phone"
+          in: "path"
+          description: "Delete complete data from Mangoose"
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+      security:
+        - api_key: []
+
+definitions:
+  User:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      email:
+        type: "string"
+      phone:
+        type: "string"
+      password:
+        type: "string"
+      profile_image:
+        type: "string"
+      status:
+        type: "string"
+    xml:
+      name: "User Add"
+
+  Useraddress:
+    type: "object"
+    properties:
+      address_type:
+        type: "string"
+      house_no:
+        type: "string"
+      floor_no:
+        type: "string"
+      building_name:
+        type: "string"
+      street_name:
+        type: "string"
+      landmark:
+        type: "string"
+      area_name:
+        type: "string"
+      city:
+        type: "string"
+      state:
+        type: "string"
+      country:
+        type: "string"
+      pincode:
+        type: "string"
+      status:
+        type: "string"
+    xml:
+      name: "User Address"
+
+  Userupdate:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      email:
+        type: "string"
+      phone:
+        type: "string"
+      password:
+        type: "string"
+      profile_image:
+        type: "string"
+
+    xml:
+      name: "User Add"

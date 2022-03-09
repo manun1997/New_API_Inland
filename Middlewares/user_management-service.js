@@ -165,3 +165,29 @@ module.exports.deleteuser = (req, res, next) => {
       });
     });
 };
+
+module.exports.deletemanyuser = (req, res, next) => {
+  User.deleteMany({ phone: req.params.phone })
+    .then((data) => {
+      if (data) {
+        res.send({
+          status: true,
+          staus_code: 200,
+          message: "Successfully all the data delete",
+        });
+      } else {
+        res.send({
+          status: false,
+          status_code: 400,
+          message: "Can't able to delete the data",
+        });
+      }
+    })
+    .catch((err) => {
+      res.send({
+        status: false,
+        status_code: 203,
+        message: err,
+      });
+    });
+};

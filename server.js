@@ -4,12 +4,15 @@ const app = express();
 const user = require("./Routes/user_management-service");
 const adminRoutes = require("./Routes/admin-router");
 const swaggerJsdoc = require("swagger-jsdoc");
-const YAML = require("yaml-js");
+const YAML = require("yamljs");
 const swaggerUi = require("swagger-ui-express");
 swaggerDocument = YAML.load("swagger.yaml");
+const cors = require("cors");
 
 app.use(express.json());
 app.use(express.urlencoded());
+
+app.use(cors());
 app.use(user);
 app.use(adminRoutes);
 
