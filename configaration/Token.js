@@ -13,7 +13,6 @@ module.exports.generateToken = (data, callback) => {
     },
     _conf.secretKey,
     function (err, token) {
-      console.log(token);
       if (err) return callback(err, token);
       else return callback(err, token);
     }
@@ -23,7 +22,7 @@ module.exports.generateToken = (data, callback) => {
 // Token authentication checking postman
 module.exports.checkToken = (req, res, next) => {
   var token = req.headers["x-access-token"] || req.headers["authorization"];
-  console.log(token);
+
   if (token) {
     if (token.startsWith("Bearer ")) {
       token = token.slice(7, token.length);
