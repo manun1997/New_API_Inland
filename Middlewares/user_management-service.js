@@ -7,22 +7,27 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const morgon = require("morgan");
 const logger = require("../logger");
+const err = {};
+Error.captureStackTrace(err);
 
 module.exports.adduser = (req, res, next) => {
   let userData = req.body;
   userData.status = "active";
   const user = new User(userData);
   user.password = CryptoJS.MD5(user.password).toString();
+  const response = req.responseBody;
   // common.checkToken(req, res, (uData, token) => {
   user
     .save()
     .then((data) => {
+      const successoperation = "User Data Saved successfully";
+
       res.send({
         status: true,
         status_code: 200,
         message: "User registered successfully",
       });
-      logger.log("info", { message: data });
+      logger.log("info", { message: userData });
     })
     .catch((err) => {
       res.send({
@@ -30,7 +35,7 @@ module.exports.adduser = (req, res, next) => {
         status_code: 200,
         message: "Error in inserting user data",
       });
-      logger.log("error", { message: err });
+      logger.log("error", { message: err.stack });
     });
   // });
 };
@@ -57,6 +62,7 @@ module.exports.userlogin = (req, res, next) => {
               msg: "Login successfully",
               token: token,
             });
+            logger.log("info", { message: resp });
           }
         });
       } else {
@@ -65,6 +71,8 @@ module.exports.userlogin = (req, res, next) => {
           status_code: 203,
           message: "Invalid Operation",
         });
+
+        logger.log("error", { message: err.stack });
       }
     }
   );
@@ -242,3 +250,31 @@ module.exports.deletemanyuser = (req, res, next) => {
       });
   });
 };
+
+module.exports.insertmanyuser = (req, res, next) => {
+  User.insertMany(req.body)
+    .then((data) => {
+      if (data) {
+        res.send({
+          status: true,
+          status_code: 200,
+          message: "Successfully User Data deleted",
+        });
+      } else {
+        res.send({
+          status: true,
+          status_code: 200,
+          message: "Unsuccessfull Delete Operation",
+        });
+      }
+    })
+    .catch((err) => {
+      res.send({
+        status: false,
+        status_code: 203,
+        message: "Error While Delete The User Data",
+      });
+    });
+};
+
+module.exports.updatemanydata = (req, res, next) => {};

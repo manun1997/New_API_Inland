@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const user = require("./Routes/user_management-service");
+const orders = require("./Routes/oredr_management");
 const adminRoutes = require("./Routes/admin-router");
 const swaggerJsdoc = require("swagger-jsdoc");
 const YAML = require("yamljs");
@@ -11,7 +12,8 @@ const cors = require("cors");
 var winston = require("winston");
 require("winston-daily-rotate-file");
 const dashLogger = require("./logger");
-const morgon = require("morgan");
+const morgan = require("morgan");
+const rt = require("file-stream-rotator");
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -20,7 +22,7 @@ app.use(cors());
 app.use(user);
 app.use(adminRoutes);
 
-morgon.token("json", function (req, res) {
+morgan.token("json", function (req, res) {
   return JSON.stringify({
     timestamp: new Date().toString(),
     method: req.method,
@@ -31,6 +33,13 @@ morgon.token("json", function (req, res) {
   });
 });
 
+let writer = rt.getStream({
+  filename: "log/activityLog.log",
+  frequency: "daily",
+  verbose: true,
+});
+
+app.use(morgan("common", { stream: writer }));
 app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // const logger = winston.createLogger({
