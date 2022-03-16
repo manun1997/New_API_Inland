@@ -18,7 +18,7 @@ const rt = require("file-stream-rotator");
 app.use(express.json());
 app.use(express.urlencoded());
 
-app.use(cors());
+// app.use(cors());
 app.use(user);
 app.use(adminRoutes);
 
@@ -40,7 +40,7 @@ let writer = rt.getStream({
 });
 
 app.use(morgan("common", { stream: writer }));
-app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api_test", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // const logger = winston.createLogger({
 //   level: "info",

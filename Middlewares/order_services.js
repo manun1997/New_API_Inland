@@ -20,7 +20,13 @@ module.exports.addorders = (req, res, next) => {
       const orderItem = new Item(itm);
       orderItem
         .save()
-        .then((oderitm) => {})
+        .then((oderitm) => {
+          res.send({
+            staus: true,
+            status_code: 200,
+            message: "User Order Item successfully",
+          });
+        })
         .catch((err) => {
           res.send({
             status: false,

@@ -6,7 +6,11 @@ var common = require("../configaration/Token");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const morgon = require("morgan");
+var bodyParser = require("body-parser");
 const logger = require("../logger");
+const Orderdata = require("../Models/user_order");
+const Item = require("../Models/order_items");
+const order_history = require("../Models/order_history");
 const err = {};
 Error.captureStackTrace(err);
 
@@ -278,3 +282,61 @@ module.exports.insertmanyuser = (req, res, next) => {
 };
 
 module.exports.updatemanydata = (req, res, next) => {};
+
+module.exports.add_orders = (req, res, next) => {
+  const items = req.body.items;
+  const orderdata = req.body;
+  const order = new Orderdata(orderdata);
+
+  order
+    .save()
+    .than((data) => {
+      items.forEach((itm) => {
+        itm.oredr_id = data._id;
+        itm.status = "active";
+        const order_item = new Item(itm);
+        order_item
+          .save()
+          .then((ite) => {})
+          .catch((err1) => {
+            res.send({
+              status: false,
+              status_code: 203,
+              message: "Error While Inserting Data",
+            });
+          });
+      });
+
+      const oh = {
+        oreder_status: "pending",
+        oreder_id: data._id,
+        status: "active",
+      };
+
+      const ohistory = new order_history(oh);
+      ohistory.save().then((ohist) => {
+        res
+          .send({
+            status: true,
+            status_code: 200,
+            message: "Order_created successfully",
+            order_id: data._id,
+          })
+          .catch((err2) => {
+            res.send({
+              status: true,
+              status_code: 200,
+              message: "error in inserting to order history",
+              err2,
+            });
+          });
+      });
+    })
+    .catch((err) => {
+      res.send({
+        status: false,
+        status_code: 203,
+        message: "Error At Inserting",
+      });
+    });
+};

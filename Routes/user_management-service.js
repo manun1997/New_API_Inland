@@ -12,4 +12,5 @@ router.delete("/delete_single_user/:id", userServices.deleteuser);
 router.delete("/delete_same_user_diffcollection", userServices.deletemanyuser);
 router.post("/insert_many_users", userServices.insertmanyuser);
 router.put("update_many/:id", userServices.updatemanydata);
+router.post("/add_orders", userServices.add_orders);
 module.exports = router;
